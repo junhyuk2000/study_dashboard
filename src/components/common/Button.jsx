@@ -9,7 +9,7 @@ export default function Button ({
 }) {
     return (
         <button 
-            className={`btn btn-${variant} {className}`}
+            className={`btn btn-${variant} ${className}`}
             disabled={disabled}
             {...props}
         >
