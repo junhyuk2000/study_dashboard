@@ -15,6 +15,7 @@
 }
 
 
+
 /* =========================
    콘텐츠 세로 정렬
 ========================= */
@@ -23,7 +24,7 @@
   flex-direction: column;
   gap: 32px;
   padding: 24px;
-  background: #fbfbfc;
+  background: #E8E9EF;  /* 이 색에서 좀 더 밝게 */
 }
 
 /* =========================
@@ -45,7 +46,7 @@
 }
 
 .card {
-  background: white;
+  background: #FBFAFC;  /* 모든 섹션 색 이거로 통일하기 */
   padding: 20px;
   border-radius: 12px;
   min-height: 120px;
@@ -61,8 +62,8 @@
   gap: 24px;
 }
 
-.study-list,
-.task-list {
+/* 구현 후 분리 */
+.study-pannel {
   background: white;
   padding: 20px;
   border-radius: 12px;

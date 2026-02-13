@@ -3,7 +3,7 @@
 ========================= */
 .btn {
   width: auto;
-  height: 44px;
+  padding: 10px 14px;
   border-radius: 6px;
   font-size: 16px;
   font-weight: 600;
@@ -34,4 +34,16 @@
 .btn-small {
   width: 10%;
   padding: 5px;
+}
+
+.btn-add {
+  padding: 6px 10px;
+}
+.btn-delete {
+  padding: 4px 8px;
+}
+
+.btn-add-confirm {
+  padding: 6px 10px;
+  font-size: 13px;
 }
