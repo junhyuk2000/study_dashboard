@@ -4,8 +4,9 @@ import "../styles/login.css";
 import { MdCalendarMonth } from "react-icons/md";
 import Button from "../components/common/Button";
 import { login } from "../auth/authService";
-import { setToken } from "../auth/token";
 import WindowHeader from "../components/layout/WindowHeader"
+
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -14,11 +15,16 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const ERROR_MAP = {
+  "Invalid login credentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+  };
+
   const handleSubmit = async (e) => {
     e?.preventDefault?.();
     setError("");
-
-    if (!id || !password) {
+    
+    //1차 공백 입력
+    if (!id.trim() || !password.trim()) {
       setError("이메일과 비밀번호를 입력해 주세요.");
       return;
     }
@@ -26,10 +32,9 @@ export default function Login() {
     try {
       setLoading(true);
       const res = await login({ id, password });
-      setToken(res.accessToken);
       navigate("/dashboard");
-    } catch (err) {
-      setError(err?.message ?? "로그인 실패");
+    } catch (err) { //2차 아이디 or 비밀번호 틀릴 시
+      setError(ERROR_MAP[err?.message] || "로그인 실패")
     } finally {
       setLoading(false);
     }
@@ -38,12 +43,6 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
-        {/* <div className="design-box">
-          <span className="dot red"></span>
-          <span className="dot yellow"></span>
-          <span className="dot green"></span>
-          <span className="address-bar"></span>
-        </div> */}
         <WindowHeader/>
         <div className="login-title">
           <MdCalendarMonth className="calendar-icon" />
@@ -54,11 +53,11 @@ export default function Login() {
 
         <div className="login-form">
           <div className="form-group">
-            <label>아이디</label>
+            <label>이메일</label>
             <div className="input-wrapper">
               <input
-                type="id"
-                placeholder="아이디"
+                type="email"
+                placeholder="이메일"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
               />

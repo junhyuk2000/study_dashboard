@@ -1,22 +1,55 @@
 import Layout from "../components/layout/Layout";
 import "../styles/Dashboard.css";
-import { clearToken } from "../auth/token"
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import SummaryCard from "../components/SummaryCard";
 import StudyList from "../components/StudyList";
 import StudyPannel from "../components/StudyPannel";
+import { supabase } from "../lib/supabaseClient";
+import {logout} from "../auth/authService";
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    clearToken();
+  const handleLogout = async() => {
+    await logout();
     navigate("/login");
   };
+
   // 4번 리스트
   const [sessions,setSessions] = useState([]);
+
+  useEffect(()=>{
+    const loadTodos = async()=>{
+      //로그인 한 사용자 가져오기
+      const {
+        data:{ user },
+      } = await supabase.auth.getUser();
+
+      if(!user) return;
+      
+      const {data, error} =await supabase
+      .from("todos")
+      .select("*")
+      .order("created_at", {ascending:false});
+
+      if(error) {
+        console.error("loadTodos error",data,error);
+        return;
+      }
+      
+      setSessions(
+        (data ?? []).map((t)=>({
+          id:t.id,
+          title:t.title,
+          done:t.done,
+          minutes:30,
+        }))
+      );
+    };
+    loadTodos();
+    },[])
 
   const todayTodoCount = sessions.length;
 

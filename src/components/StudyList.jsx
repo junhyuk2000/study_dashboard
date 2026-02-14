@@ -1,6 +1,8 @@
 import Button from "./common/Button";
 import { useState } from "react";
 import "../styles/StudyList.css"
+import { supabase } from "../lib/supabaseClient";
+
 
 export default function StudyList({ sessions, setSessions }) {
 
@@ -8,36 +10,80 @@ export default function StudyList({ sessions, setSessions }) {
     const [title,setTitle] = useState("");
 
     //리스트 아이템 추가
-    const addSession = () => {
+    const addSession = async() => {
         const trimmed = title.trim();
         if (!trimmed) return;
 
-        const newSession = {
-            id: Date.now(),
-            title: trimmed,
-            minutes: 30,
-            done: false,
-        };
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError) {
+            console.error("getUser error", userError);
+            return;
+        }
+        if (!user) {
+            console.error("No user (not logged in)");
+            return;
+        }
 
-        setSessions((prev) => [newSession, ...prev]);
+        const { data, error } = await supabase
+        .from("todos")
+        .insert([
+            {
+                title:trimmed,
+                done:false,
+                user_id:user.id,
+            },
+        ])
+        .select()
+        .single();
 
+        if(error){
+            console.error("insert error",error);
+            return;
+        }
+
+        setSessions((prev)=>[
+            {
+                id:data.id,
+                title:data.title,
+                done:data.done,
+                minutes:30,
+            },
+            ...prev,
+        ])
         setTitle("");
-        setIsAdding(false);
+
     };
 
 
     // 리스트 아이템 삭제
-    const removeSession =(id) =>{
+    const removeSession = async(id) =>{
+        const { error } = await supabase
+        .from("todos")
+        .delete()
+        .eq("id",id);
+
+        if(error) {
+            console.error("delete error:",error);
+            return;
+        }
         setSessions(prev=>prev.filter(item=>item.id !== id))
     }
     // 체크박스 토글
-    const toggleDone = (id) =>{
+    const toggleDone = async(id,nextDone) =>{
+        const { error } = await supabase
+        .from("todos")
+        .update({ done:nextDone })
+        .eq("id",id);
+
+        if(error) {
+            console.error("update error:",error);
+            return;
+        }
+        
         setSessions((prev)=>
         prev.map((item)=>
-            item.id === id
-            ? { ...item, done: !item.done}
-            : item
-    ));
+            item.id === id ? { ...item, done: nextDone } : item )
+        );
     };
     
 
@@ -77,7 +123,7 @@ export default function StudyList({ sessions, setSessions }) {
                         <input
                             type="checkbox"
                             checked={item.done}
-                            onChange={()=>toggleDone(item.id)}
+                            onChange={(e)=>toggleDone(item.id, e.target.checked)}
                         />
                         {item.title}
                     </div>

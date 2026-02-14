@@ -1,8 +1,24 @@
-export async function login({id,password}){
-    await new Promise((r)=> setTimeout(r , 400));
+import { supabase } from "../lib/supabaseClient"
 
-    if(id === "1" && password === "1"){
-        return {accessToken:"mock-token-abc123", user : { name:"Tese User" } };
+export async function login({ id, password }){
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email:id,
+        password,
+    });
+
+    if(error){
+        throw new Error(error.message);
     }
-    throw new Error("아이디 또는 비밀번호가 올바르지 않습니다.");
+    return data; //{user, session}
+}
+
+export async function logout() {
+    const { error } = await supabase.auth.signOut();
+    if(error) throw new Error(error.message);
+}
+
+export async function getSession(){
+    const { data, error } = await supabase.auth.getSession();
+    if(error) throw new Error(error.message);
+    return data.session; //null or session
 }
