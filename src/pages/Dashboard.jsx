@@ -2,12 +2,13 @@ import Layout from "../components/layout/Layout";
 import "../styles/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/common/Button";
-import { useState,useEffect } from "react";
+import { useState,useEffect,useMemo } from "react";
 import SummaryCard from "../components/SummaryCard";
 import StudyList from "../components/StudyList";
 import StudyPannel from "../components/StudyPannel";
 import { supabase } from "../lib/supabaseClient";
 import {logout} from "../auth/authService";
+import StudyChart from"../components/StudyChart"
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function Dashboard() {
   // 4번 리스트
   const [sessions,setSessions] = useState([]);
 
+  // ===== SUPABASE TODOS LOAD =====
   useEffect(()=>{
     const loadTodos = async()=>{
       //로그인 한 사용자 가져오기
@@ -52,9 +54,9 @@ export default function Dashboard() {
     loadTodos();
     },[])
 
+  // ===== TODAY SUMMARY =====
   const todayTodoCount = sessions
   .filter((s)=>!s.done).length;
-  // const todayTodoCount = sessions.length;
 
   //오늘 공부시간 계산
   const isToday = (iso) =>{
@@ -73,7 +75,7 @@ export default function Dashboard() {
   .reduce((sum,s)=>sum + (s.minutes ?? 0),0);
 
 
-  //이번주 공부시간 계산
+  // =====  WEEK RANGE & WEEK SUMMARY =====
   const startOfWeek = (date) =>{
     const d = new Date(date);
     const day = d.getDay();
@@ -83,10 +85,57 @@ export default function Dashboard() {
     return d;
   }
   const weekStart = startOfWeek(new Date());
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 7);
 
-  const weekMinutes = sessions
-  .filter((s)=> s.done && new Date(s.created_at) >= weekStart)
-  .reduce((sum,s)=> sum + (s.minutes ?? 0),0);
+const weekMinutes = sessions
+  .filter((s) => {
+    const d = new Date(s.created_at);
+    return s.done && d >= weekStart && d < weekEnd;
+  })
+  .reduce((sum, s) => sum + (s.minutes ?? 0), 0);
+
+  // ===== WEEKLY CHART DATA (sessions → 요일별 minutes) =====
+  const weeklyData = useMemo(() => {
+    const base = [
+      { name: "월", minutes: 0 },
+      { name: "화", minutes: 0 },
+      { name: "수", minutes: 0 },
+      { name: "목", minutes: 0 },
+      { name: "금", minutes: 0 },
+      { name: "토", minutes: 0 },
+      { name: "일", minutes: 0 },
+    ];
+
+    const now = new Date();
+
+    // 이번주 월요일 00:00
+    const chartWeekStart = new Date(now);
+    const day = now.getDay(); // 0=일,1=월...
+    const diffToMon = day === 0 ? 6 : day - 1;
+    chartWeekStart.setDate(now.getDate() - diffToMon);
+    chartWeekStart.setHours(0, 0, 0, 0);
+
+    // 다음주 월요일 00:00
+    const chartWeekEnd = new Date(chartWeekStart);
+    chartWeekEnd.setDate(chartWeekStart.getDate() + 7);
+
+    for (const s of sessions) {
+      if (!s.done) continue;
+
+      const d = new Date(s.created_at);
+      if (d < chartWeekStart || d >= chartWeekEnd) continue;
+
+      const jsDay = d.getDay(); // 0=일..6=토
+      const idx = jsDay === 0 ? 6 : jsDay - 1; // 월=0..일=6
+
+      base[idx].minutes += Number(s.minutes) || 0;
+    }
+
+    return base;
+  }, [sessions]);
+
+  // ===== DASHBOARD UI =====
   return (
     
     <Layout>
@@ -108,7 +157,11 @@ export default function Dashboard() {
           <StudyPannel />
       </section>
 
-      <section className="progress-section">이번주 공부 시간 현황</section>
+      <section className="progress-section">
+          <StudyChart data={weeklyData}/>
+      </section>
+
+
     </Layout>
   );
 }

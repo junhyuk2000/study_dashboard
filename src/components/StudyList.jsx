@@ -8,7 +8,7 @@ export default function StudyList({ sessions, setSessions }) {
 
     const [isAdding,setIsAdding] = useState(false);
     const [title,setTitle] = useState("");
-    const [minutes,setMinutes] = useState(0);
+    const [minutes,setMinutes] = useState();
     //리스트 아이템 추가
     const addSession = async() => {
         const trimmed = title.trim();
@@ -57,6 +57,7 @@ export default function StudyList({ sessions, setSessions }) {
         ])
         setTitle("");
         setIsAdding(false);
+        setMinutes();
     };
 
 
@@ -73,6 +74,7 @@ export default function StudyList({ sessions, setSessions }) {
         }
         setSessions(prev=>prev.filter(item=>item.id !== id))
     }
+
     // 체크박스 토글
     const toggleDone = async(id,nextDone) =>{
         const { error } = await supabase
