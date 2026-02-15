@@ -44,15 +44,49 @@ export default function Dashboard() {
           id:t.id,
           title:t.title,
           done:t.done,
-          minutes:30,
+          minutes:t.minutes ?? 30,
+          created_at : t.created_at,
         }))
       );
     };
     loadTodos();
     },[])
 
-  const todayTodoCount = sessions.length;
+  const todayTodoCount = sessions
+  .filter((s)=>!s.done).length;
+  // const todayTodoCount = sessions.length;
 
+  //오늘 공부시간 계산
+  const isToday = (iso) =>{
+    const d = new Date(iso);
+    const now = new Date();
+
+    return(
+      d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+    );
+  };
+
+  const todayMinutes = sessions
+  .filter((s)=>s.done && isToday(s.created_at))
+  .reduce((sum,s)=>sum + (s.minutes ?? 0),0);
+
+
+  //이번주 공부시간 계산
+  const startOfWeek = (date) =>{
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = (day === 0 ? -6 : 1) - day;
+    d.setDate(d.getDate()+diff);
+    d.setHours(0,0,0,0);
+    return d;
+  }
+  const weekStart = startOfWeek(new Date());
+
+  const weekMinutes = sessions
+  .filter((s)=> s.done && new Date(s.created_at) >= weekStart)
+  .reduce((sum,s)=> sum + (s.minutes ?? 0),0);
   return (
     
     <Layout>
@@ -64,9 +98,9 @@ export default function Dashboard() {
       </section>
     
       <section className="summary-section">
-        <SummaryCard label="오늘 공부시간" value="0분" />
-        <SummaryCard label="오늘 할 일" value={`${todayTodoCount}개`} />
-        <SummaryCard label="이번주 목표" value="0분" />
+        <SummaryCard label="오늘 공부시간" value={`${todayMinutes} 분`} />
+        <SummaryCard label="오늘 할 일" value={`${todayTodoCount} 개`} />
+        <SummaryCard label="이번주 목표" value={`${weekMinutes} 분`} />
       </section>
 
       <section className="list-section">

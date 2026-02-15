@@ -8,11 +8,14 @@ export default function StudyList({ sessions, setSessions }) {
 
     const [isAdding,setIsAdding] = useState(false);
     const [title,setTitle] = useState("");
-
+    const [minutes,setMinutes] = useState(0);
     //리스트 아이템 추가
     const addSession = async() => {
         const trimmed = title.trim();
         if (!trimmed) return;
+
+        const m = Number(minutes);
+        if(!Number.isFinite(m) || m <=0 ) return;
 
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if (userError) {
@@ -31,6 +34,7 @@ export default function StudyList({ sessions, setSessions }) {
                 title:trimmed,
                 done:false,
                 user_id:user.id,
+                minutes:m,
             },
         ])
         .select()
@@ -46,12 +50,13 @@ export default function StudyList({ sessions, setSessions }) {
                 id:data.id,
                 title:data.title,
                 done:data.done,
-                minutes:30,
+                minutes:data.minutes ?? m,
+                created_at:data.created_at,
             },
             ...prev,
         ])
         setTitle("");
-
+        setIsAdding(false);
     };
 
 
@@ -98,11 +103,20 @@ export default function StudyList({ sessions, setSessions }) {
             {isAdding && (
                 <div className="task-input-row">
                     <input
-                    className="task-input"
-                    value={title}
-                    placeholder="할 일을 입력하세요"
-                    onChange={(e) => setTitle(e.target.value)}
-                    onKeyDown={(e) => {if (e.key === "Enter") addSession();}}
+                        className="task-input"
+                        value={title}
+                        placeholder="할 일을 입력하세요"
+                        onChange={(e) => setTitle(e.target.value)}
+                        onKeyDown={(e) => {if (e.key === "Enter") addSession();}}
+                    />
+                    <input
+                        className="task-minutes"
+                        type="number"
+                        min={0}
+                        step={5}
+                        value={minutes}
+                        placeholder="분"
+                        onChange={(e) => setMinutes(Number(e.target.value))}
                     />
                     <Button
                         variant="gray"
