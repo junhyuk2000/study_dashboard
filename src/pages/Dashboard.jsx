@@ -5,7 +5,7 @@ import Button from "../components/common/Button";
 import { useState,useEffect,useMemo } from "react";
 import SummaryCard from "../components/SummaryCard";
 import StudyList from "../components/StudyList";
-import StudyPannel from "../components/StudyPannel";
+import StudyHistory from "../components/StudyHistory";
 import { supabase } from "../lib/supabaseClient";
 import {logout} from "../auth/authService";
 import StudyChart from"../components/StudyChart"
@@ -73,6 +73,9 @@ export default function Dashboard() {
     );
   };
 
+  const todaySessions = sessions.filter((s) =>
+  isToday(s.created_at)
+  );
 
   //하루 공부시간 계산
   const todayTotalMinutes = sessions
@@ -139,8 +142,8 @@ export default function Dashboard() {
       </section>
 
       <section className="list-section">
-          <StudyList sessions={sessions} setSessions={setSessions} />
-          <StudyPannel />
+          <StudyList sessions={todaySessions} setSessions={setSessions} />
+          <StudyHistory sessions={sessions}/>
       </section>
 
       <section className="progress-section">
