@@ -86,6 +86,11 @@ export default function Login() {
               {loading ? "로그인 중..." : "Login"}
             </Button>
           </div>
+          <div className="button-row">
+            <Button variant="skyblue" className="btn-full" onClick={()=>navigate("/signup")} disabled={loading}>
+              회원가입
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: .3s;
+  transition: filter .2s ease;
 }
 .btn:hover {
   filter: brightness(0.9);
@@ -21,6 +21,11 @@
 .btn-gray {
     background-color: #9aa3af;
     color: #fff;
+}
+
+.btn-skyblue {
+    background-color: #38BDF8;
+    color:#fff;
 }
 
 

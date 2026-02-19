@@ -1,5 +1,6 @@
-import {Routes,Route,Navigate, replace} from "react-router-dom"
+import { Routes,Route,Navigate } from "react-router-dom"
 import Login from "./pages/Login"
+import Signup from "./pages/Signup"
 import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./router/ProtectedRoute.jsx";
 import './App.css'
@@ -9,6 +10,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Navigate to="/login" replace/>}/>
             <Route path="/login" element={<Login />}/>
+            <Route path="/signup" element={<Signup />}/>
             <Route path="/dashboard" 
                 element={
                     <ProtectedRoute>

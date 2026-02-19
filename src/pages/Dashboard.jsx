@@ -7,7 +7,7 @@ import SummaryCard from "../components/SummaryCard";
 import StudyList from "../components/StudyList";
 import StudyHistory from "../components/StudyHistory";
 import { supabase } from "../lib/supabaseClient";
-import {logout} from "../auth/authService";
+import { logout } from "../auth/authService";
 import StudyChart from"../components/StudyChart"
 import { formatMinutes } from "../utils/formatMinutes";
 import { getWeekRange } from "../utils/getWeekRange";

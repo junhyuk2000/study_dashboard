@@ -22,3 +22,16 @@ export async function getSession(){
     if(error) throw new Error(error.message);
     return data.session; //null or session
 }
+
+export async function signup({ email, password, nickname }){
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            data: { nickname },
+        },
+    });
+
+    if(error) throw error;
+    return data;
+}
