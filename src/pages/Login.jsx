@@ -35,6 +35,7 @@ export default function Login() {
       navigate("/dashboard");
     } catch (err) { //2차 아이디 or 비밀번호 틀릴 시
       setError(ERROR_MAP[err?.message] || "로그인 실패")
+      console.log(err);
     } finally {
       setLoading(false);
     }

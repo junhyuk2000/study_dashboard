@@ -21,8 +21,8 @@ export default function Dashboard() {
     navigate("/login");
   };
 
-  // 4번 리스트
   const [sessions,setSessions] = useState([]);
+  const [nickname, setNickname] = useState("");
 
   // ===== SUPABASE TODOS LOAD =====
   useEffect(()=>{
@@ -34,6 +34,9 @@ export default function Dashboard() {
 
       if(!user) return;
       
+      const name = user?.user_metadata?.nickname ?? "";
+      setNickname(name);
+
       const {data, error} =await supabase
       .from("todos")
       .select("*")
@@ -129,7 +132,10 @@ export default function Dashboard() {
     
     <Layout>
       <section className="section-top">
-          <h1>Dashboard</h1>
+          <div>
+            <h1>Dashboard</h1>
+            <p className="nick-name">{nickname ? `${nickname}님, 오늘도 화이팅! `: ""}</p>
+          </div>
           <Button variant="gray" className="btn-small" onClick={handleLogout}>
             Logout
           </Button>
