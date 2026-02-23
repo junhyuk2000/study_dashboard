@@ -1,9 +1,20 @@
 .study-list {
-      background: white;
+  background: white;
   padding: 20px;
   border-radius: 12px;
   min-height: 250px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.studylist-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.studylist-title {
+  font-weight: 700;
 }
 
 .task-input-row {

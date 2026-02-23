@@ -1,5 +1,5 @@
 import { formatMinutes } from "../utils/formatMinutes";
-
+import "../styles/StudyHistory.css"
 
 export default function StudyHistory({ sessions }) {
     const recentDone = (sessions ?? [])
@@ -27,21 +27,29 @@ export default function StudyHistory({ sessions }) {
     };
 
 
-    return (
-        <section className="history-section">
-        <h3>최근 기록</h3>
+return (
+  <div className="history-section">
+    <h3>최근 기록</h3>
 
-        {recentDone.length === 0 ? (
-            <p>아직 완료한 기록이 없어요.</p>
-        ) : (
-            <ul>
-            {recentDone.map((s) => (
-                <li key={s.id}>
-                {toRelativeDay(s.created_at)} · {s.title} · {formatMinutes(s.minutes)}
-                </li>
-            ))}
-            </ul>
-        )}
-        </section>
-    );
+    {recentDone.length === 0 ? (
+      <p className="history-empty">아직 완료한 기록이 없어요.</p>
+    ) : (
+      <ul className="history-list">
+        {recentDone.map((s) => (
+            <li key={s.id} className="history-item">
+                <div className="history-main">
+                    <div className="history-left">
+                        <span className="history-title">{s.title}</span>
+                        <span className="history-badge">{toRelativeDay(s.created_at)}</span>
+                    </div>
+
+                    <span className="history-time">{formatMinutes(s.minutes)}</span>
+                </div>
+            </li>
+        ))}
+      </ul>
+    )}
+  </div>
+);
+
 }

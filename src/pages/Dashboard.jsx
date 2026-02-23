@@ -40,7 +40,8 @@ export default function Dashboard() {
       const {data, error} =await supabase
       .from("todos")
       .select("*")
-      .order("created_at", {ascending:false});
+      .order("created_at", {ascending:false})
+      .eq("user_id", user.id);
 
       if(error) {
         console.error("loadTodos error",data,error);
@@ -99,7 +100,7 @@ export default function Dashboard() {
     .reduce((sum, s) => sum + (s.minutes ?? 0), 0);
   const weekTotalTime = formatMinutes(weekMinutes);
 
-  // ===== WEEKLY CHART DATA (sessions → 요일별 minutes) =====
+  // ===== 주간 차트 데이터 (sessions → 요일별 minutes) =====
   const weeklyData = useMemo(() => {
     const base = [
       { name: "월", minutes: 0 },
@@ -131,30 +132,29 @@ export default function Dashboard() {
   return (
     
     <Layout>
-      <section className="section-top">
-          <div>
-            <h1>Dashboard</h1>
-            <p className="nick-name">{nickname ? `${nickname}님, 오늘도 화이팅! `: ""}</p>
-          </div>
-          <Button variant="gray" className="btn-small" onClick={handleLogout}>
-            Logout
-          </Button>
-      </section>
-    
-      <section className="summary-section">
-        <SummaryCard label="오늘 공부시간" value={todayTotalTime} />
-        <SummaryCard label="오늘 할 일" value={`${todayTodoCount} 개`} />
-        <SummaryCard label="이번주 공부 시간" value={weekTotalTime} />
-      </section>
-
-      <section className="list-section">
-          <StudyList sessions={todaySessions} setSessions={setSessions} />
-          <StudyHistory sessions={sessions}/>
-      </section>
-
-      <section className="progress-section">
-          <StudyChart data={weeklyData}/>
-      </section>
+      <div className="dashboard-page">
+        <section className="section-top">
+            <div>
+              <h1>Dashboard</h1>
+              <p className="nick-name">{nickname ? `${nickname}님, 오늘도 화이팅! `: ""}</p>
+            </div>
+            <Button variant="gray" className="btn-small" onClick={handleLogout}>
+              Logout
+            </Button>
+        </section>
+        <section className="summary-section">
+          <SummaryCard label="오늘 공부시간" value={todayTotalTime} />
+          <SummaryCard label="오늘 할 일" value={`${todayTodoCount} 개`} />
+          <SummaryCard label="이번주 공부 시간" value={weekTotalTime} />
+        </section>
+        <section className="list-section">
+            <StudyList sessions={todaySessions} setSessions={setSessions} />
+            <StudyHistory sessions={sessions}/>
+        </section>
+        <section className="progress-section">
+            <StudyChart data={weeklyData}/>
+        </section>
+      </div>
 
 
     </Layout>

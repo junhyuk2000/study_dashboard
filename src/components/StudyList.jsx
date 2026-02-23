@@ -97,10 +97,12 @@ export default function StudyList({ sessions, setSessions }) {
   return (
     <>
         <div className="study-list">
-            <span>오늘 할일 리스트</span>
-            <Button variant="gray" className="btn-add" onClick={()=> setIsAdding((prev)=>!prev)}>
-            + add
-            </Button>
+            <div className="studylist-header">
+                <span className="studylist-title">오늘 할일 리스트</span>
+                <Button variant="gray" className="btn-add" onClick={()=> setIsAdding((prev)=>!prev)}>
+                + add
+                </Button>
+            </div>
 
             {isAdding && (
                 <div className="task-input-row">

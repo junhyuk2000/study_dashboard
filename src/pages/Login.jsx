@@ -5,12 +5,13 @@ import { MdCalendarMonth } from "react-icons/md";
 import Button from "../components/common/Button";
 import { login } from "../auth/authService";
 import WindowHeader from "../components/layout/WindowHeader"
-
+import Input from "../components/common/Input"
+import "../styles/Input.css"
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,14 +25,14 @@ export default function Login() {
     setError("");
     
     //1차 공백 입력
-    if (!id.trim() || !password.trim()) {
+    if (!email.trim() || !password.trim()) {
       setError("이메일과 비밀번호를 입력해 주세요.");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await login({ id, password });
+      const res = await login({ email, password });
       navigate("/dashboard");
     } catch (err) { //2차 아이디 or 비밀번호 틀릴 시
       setError(ERROR_MAP[err?.message] || "로그인 실패")
@@ -42,6 +43,7 @@ export default function Login() {
   };
 
   return (
+    
     <div className="login-container">
       <div className="login-box">
         <WindowHeader/>
@@ -50,41 +52,39 @@ export default function Login() {
           <h1 className="title-name">My DashBoard</h1>
         </div>
 
-        <p>로그인</p>
+        <div className="login-text">
+          <p>로그인</p>
+        </div>
 
         <div className="login-form">
           <div className="form-group">
             <label>이메일</label>
-            <div className="input-wrapper">
-              <input
-                type="email"
-                placeholder="이메일"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-              />
-            </div>
+            <Input
+              type="email"
+              placeholder="이메일"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className="form-group">
             <label>비밀번호</label>
-            <div className="input-wrapper">
-              <input
-                type="password"
-                placeholder="비밀번호"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSubmit(e); 
-                }}
-              />
-            </div>
+            <Input
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit(e); 
+              }}
+            />
           </div>
 
           {error && <p className="login-error">{error}</p>}
 
           <div className="button-row">
             <Button variant="gray" className="btn-full" onClick={handleSubmit} disabled={loading}>
-              {loading ? "로그인 중..." : "Login"}
+              {loading ? "로그인 중..." : "로그인"}
             </Button>
           </div>
           <div className="button-row">
