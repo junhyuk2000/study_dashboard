@@ -1,26 +1,30 @@
 .study-list {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  min-height: 250px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 250px;
+    max-height: 260px;     /* 레이아웃에 맞게 조절 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+    display: flex;         
+    flex-direction: column;
+    min-height: 0;         
 }
 
 .studylist-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .studylist-title {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .task-input-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
 }
 
 
@@ -28,21 +32,46 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    flex: 1;           
+    min-height: 0;     
+    overflow: auto;    
+    margin: 0;         
+    padding: 0;        
+    list-style: none;  
 }
+
+.todo-empty{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    font-size: 13px;
+}
+
 .todo-item {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #3f3f46; 
+    font-weight: 500;
+    padding: 6px 8px;
+    border-radius: 8px;
+}
+
+.todo-item:hover{
+  background: rgba(0,0,0,0.04);
 }
 
 .todo-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .todo-item.done .todo-left{
-  text-decoration: line-through;
-  opacity: 0.6;
+    text-decoration: line-through;
+    opacity: 0.6;
 }

@@ -2,7 +2,7 @@ import Button from "./common/Button";
 import { useState } from "react";
 import "../styles/StudyList.css"
 import { supabase } from "../lib/supabaseClient";
-
+import Input from "../components/common/Input";
 
 export default function StudyList({ sessions, setSessions }) {
 
@@ -106,14 +106,14 @@ export default function StudyList({ sessions, setSessions }) {
 
             {isAdding && (
                 <div className="task-input-row">
-                    <input
+                    <Input
                         className="task-input"
                         value={title}
                         placeholder="할 일을 입력하세요"
                         onChange={(e) => setTitle(e.target.value)}
                         onKeyDown={(e) => {if (e.key === "Enter") addSession();}}
                     />
-                    <input
+                    <Input
                         className="task-minutes"
                         type="number"
                         min={0}
@@ -131,26 +131,32 @@ export default function StudyList({ sessions, setSessions }) {
                     </Button>
                 </div>
             )}
-        <ul className="todo-list">
-            {sessions.map((item) => (
-                <li 
-                key={item.id}
-                className={item.done ? "todo-item done" : "todo-item"}
-                >
-                    <div className="todo-left">
-                        <input
-                            type="checkbox"
-                            checked={item.done}
-                            onChange={(e)=>toggleDone(item.id, e.target.checked)}
-                        />
-                        {item.title}
-                    </div>
-                    <Button variant="gray" className="btn-delete" onClick={() => removeSession(item.id)}            >
-                    삭제
-                    </Button>
-                </li>
-            ))}
-        </ul>
+
+            {sessions.length === 0 ? (
+                <p className="todo-empty">오늘 할 일이 없습니다.</p>
+            ) : (
+                <ul className="todo-list">
+                    {sessions.map((item) => (
+                        <li 
+                        key={item.id}
+                        className={item.done ? "todo-item done" : "todo-item"}
+                        >
+                            <div className="todo-left">
+                                <input
+                                    type="checkbox"
+                                    checked={item.done}
+                                    onChange={(e)=>toggleDone(item.id, e.target.checked)}
+                                />
+                                {item.title}
+                            </div>
+                            <Button variant="gray" className="btn-delete" onClick={() => removeSession(item.id)}            >
+                            삭제
+                            </Button>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        
         </div>
     </>
   );

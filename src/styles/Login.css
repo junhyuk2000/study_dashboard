@@ -2,11 +2,12 @@
    전체 컨테이너
 ========================= */
 .login-container {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f6f7f9;
+    background: transparent; 
+    padding: 24px 0;         
 }
 
 /* =========================
@@ -14,18 +15,12 @@
 ========================= */
 .login-box {
     width: 100%;
-    max-width: 900px;
-    min-height: 520px;
-    border: 1px solid #eee;
-    padding-bottom: 100px;
-    background: #fbfbfc;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    max-width: 700px;
+    min-height: auto;
+    padding-bottom: 50px;
+    background: transparent;
 }
 
-/* =========================
-   로그인 박스 상단 디자인
-========================= */
 
 /* =========================
    타이틀
@@ -36,19 +31,14 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    margin: 28px 0 20px;
+    margin: 28px 0 ;
 }
 .title-name {
     color:#666;
+    font-size: 28px;
 }
 
-.login-text {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 500;
-  color:#6b7280;
-  margin-bottom: 30px;
-}
+
 
 /* =========================
    로그인 폼 박스

@@ -4,9 +4,9 @@ import "../styles/login.css";
 import { MdCalendarMonth } from "react-icons/md";
 import Button from "../components/common/Button";
 import { login } from "../auth/authService";
-import WindowHeader from "../components/layout/WindowHeader"
 import Input from "../components/common/Input"
 import "../styles/Input.css"
+import Layout from "../components/layout/Layout";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -44,56 +44,50 @@ export default function Login() {
 
   return (
     
-    <div className="login-container">
-      <div className="login-box">
-        <WindowHeader/>
-        <div className="login-title">
-          <MdCalendarMonth className="calendar-icon" />
-          <h1 className="title-name">My DashBoard</h1>
-        </div>
-
-        <div className="login-text">
-          <p>로그인</p>
-        </div>
-
-        <div className="login-form">
-          <div className="form-group">
-            <label>이메일</label>
-            <Input
-              type="email"
-              placeholder="이메일"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+    <Layout>
+      <div className="login-container">
+        <div className="login-box">
+          <div className="login-title">
+            <MdCalendarMonth className="calendar-icon" />
+            <h1 className="title-name">My DashBoard</h1>
           </div>
 
-          <div className="form-group">
-            <label>비밀번호</label>
-            <Input
-              type="password"
-              placeholder="비밀번호"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSubmit(e); 
-              }}
-            />
-          </div>
-
-          {error && <p className="login-error">{error}</p>}
-
-          <div className="button-row">
-            <Button variant="gray" className="btn-full" onClick={handleSubmit} disabled={loading}>
-              {loading ? "로그인 중..." : "로그인"}
-            </Button>
-          </div>
-          <div className="button-row">
-            <Button variant="skyblue" className="btn-full" onClick={()=>navigate("/signup")} disabled={loading}>
-              회원가입
-            </Button>
+          <div className="login-form">
+            <div className="form-group">
+              <label>이메일</label>
+              <Input
+                type="email"
+                placeholder="이메일"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>비밀번호</label>
+              <Input
+                type="password"
+                placeholder="비밀번호"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSubmit(e);
+                }}
+              />
+            </div>
+            {error && <p className="login-error">{error}</p>}
+            <div className="button-row">
+              <Button variant="gray" className="btn-full" onClick={handleSubmit} disabled={loading}>
+                {loading ? "로그인 중..." : "로그인"}
+              </Button>
+            </div>
+            <div className="button-row">
+              <Button variant="skyblue" className="btn-full" onClick={()=>navigate("/signup")} disabled={loading}>
+                회원가입
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
