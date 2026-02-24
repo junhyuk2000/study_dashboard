@@ -56,42 +56,44 @@ export default function Signup () {
     return(
         <Layout>
             <div className="auth-center">
-                <div className="signup-form">
-                    <div className="signup-header">
-                        <h2>회원가입</h2>
-                        <p>닉네임과 이메일로 계정을 만들어보세요.</p>
+                <div className="dashboard-page">
+                    <div className="signup-form">
+                        <div className="signup-header">
+                            <h2>회원가입</h2>
+                            <p>닉네임과 이메일로 계정을 만들어보세요.</p>
+                        </div>
+                        <Input
+                            type="text"
+                            placeholder="닉네임"
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
+                        />
+                        <Input
+                            type="email"
+                            placeholder="이메일"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            type="password"
+                            placeholder="비밀번호"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Input
+                            type="password"
+                            placeholder="비밀번호 확인"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSubmit(e);
+                            }}
+                        />
+                        {error && <p className="signup-error">{error}</p>}
+                        <Button variant="gray" className="btn-full" onClick={handleSubmit} disabled={loading}>
+                            {loading ? "가입 중..." : "회원가입"}
+                        </Button>
                     </div>
-                    <Input
-                        type="text"
-                        placeholder="닉네임"
-                        value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
-                    />
-                    <Input
-                        type="email"
-                        placeholder="이메일"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <Input
-                        type="password"
-                        placeholder="비밀번호"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <Input
-                        type="password"
-                        placeholder="비밀번호 확인"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSubmit(e);
-                        }}
-                    />
-                    {error && <p className="signup-error">{error}</p>}
-                    <Button variant="gray" className="btn-full" onClick={handleSubmit} disabled={loading}>
-                        {loading ? "가입 중..." : "회원가입"}
-                    </Button>
                 </div>
             </div>
         </Layout>
