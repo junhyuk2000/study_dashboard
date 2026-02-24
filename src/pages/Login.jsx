@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
+import "../styles/Login.css";
 import { MdCalendarMonth } from "react-icons/md";
 import Button from "../components/common/Button";
 import { login } from "../auth/authService";
