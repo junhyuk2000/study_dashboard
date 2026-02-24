@@ -1,16 +1,134 @@
-# React + Vite
+# 📚 Study Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 학습 데이터를 기록하고 시각화하여 학습 흐름을 관리할 수 있도록 설계한 React 기반 대시보드
 
-Currently, two official plugins are available:
+React + Supabase 기반의 학습 관리 웹 애플리케이션입니다.  
+오늘 할 일 관리, 학습 시간 기록, 주간 학습 시간 시각화를 통해  
+학습 흐름을 한눈에 확인할 수 있도록 설계했습니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 **Live Demo**  
+https://study-dashboard-junhyuk.netlify.app
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🧭 프로젝트 기획 의도
 
-## Expanding the ESLint configuration
+단순한 Todo 앱이 아닌,  
+**“학습 흐름을 관리하는 대시보드”**를 만드는 것을 목표로 했습니다.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 오늘 할 일과 최근 기록을 분리하여 학습의 현재/과거를 명확히 구분
+- 주간 그래프를 통해 학습 패턴을 시각적으로 확인
+- macOS 스타일의 통일된 Layout을 적용해 실제 서비스 같은 UI 구성
+
+---
+
+## 🚀 주요 기능
+
+- 🔐 회원가입 / 로그인 (Supabase Auth)
+- 📝 오늘 할 일 추가 / 삭제 / 완료 처리
+- 🗂 완료 시 최근 기록 자동 반영
+- 📊 Recharts 기반 주간 학습 시간 그래프
+- 🕛 자정 기준 "오늘 할 일" 필터링 처리
+- 🔄 GitHub + Netlify 자동 배포 구성
+
+---
+
+## 🛠 기술 스택
+
+### Frontend
+- React (Vite 기반 SPA 아키텍처 구성)
+- CSS (Flex / Grid 기반 반응형 레이아웃 설계)
+- Recharts (학습 시간 데이터 시각화)
+
+### Backend / DB
+- Supabase (Auth + PostgreSQL 기반 데이터 관리)
+
+### Deployment
+- Netlify (GitHub 연동 CI/CD 자동 배포)
+
+---
+
+## 📂 프로젝트 구조
+```bash
+src/
+├ components/
+│ ├ common/ # Button, Input 공통 컴포넌트
+│ ├ layout/ # 공통 Layout + WindowHeader
+│ └ ...
+├ pages/ # Login, Signup, Dashboard
+├ router/ # 라우팅 관리
+├ styles/ # 전역 및 페이지별 스타일
+├ lib/ # supabaseClient
+└ utils/ # 날짜, 시간 관련 유틸
+```
+---
+
+## 🧩 설계 및 구현 과정에서 고민한 부분
+
+### 1️⃣ 공통 Layout 설계
+
+Login / Signup / Dashboard가 동일한 Window UI 구조를 사용하도록  
+공통 Layout 컴포넌트를 설계했습니다.
+
+초기에는 공통 `app-content` 스타일이 모든 페이지에 동일하게 적용되면서  
+일부 페이지에서 의도하지 않은 레이아웃 충돌이 발생했습니다.
+
+이를 해결하기 위해 전역 레이아웃과 페이지 단위 레이아웃의 책임을 분리하고,  
+페이지별 wrapper를 도입하여 스타일 적용 범위를 명확히 구분했습니다.
+
+그 결과, UI 구조의 재사용성을 유지하면서도  
+페이지별 확장에 유연한 구조를 확보할 수 있었습니다.
+
+---
+
+### 2️⃣ 대시보드 레이아웃 안정화
+
+리스트 데이터가 많아질 경우 그래프 영역이 밀리는 구조적 문제가 발생했습니다.
+
+이는 flex 기반 레이아웃에서 자식 요소의 크기 계산 방식과 관련된 이슈였으며,  
+레이아웃 흐름을 재설계하여 카드 내부에서만 스크롤이 발생하도록 구조를 수정했습니다.
+
+이를 통해 **콘텐츠 양과 무관하게 전체 대시보드 레이아웃이 안정적으로 유지되도록 개선했습니다.**
+
+---
+
+### 3️⃣ 날짜 기준 상태 관리 설계
+
+단순히 상태(done)만으로 할 일을 관리하는 것이 아니라,  
+`created_at`을 기준으로 날짜를 계산하여 "오늘"의 할 일만 표시되도록 설계했습니다.
+
+이를 통해 자정 이후에도 정확한 데이터가 표시되도록 했으며,  
+실제 학습 관리 서비스에 가까운 데이터 흐름을 구현했습니다.
+
+---
+
+### 4️⃣ 배포 환경에서의 Supabase 연결 이슈 해결
+
+로컬 환경에서는 정상 동작했지만 Netlify 배포 후 인증이 실패하는 문제가 발생했습니다.
+
+원인을 분석한 결과,  
+`import.meta.env` 값은 빌드 시점에 주입된다는 점을 확인했습니다.
+
+해결 방법:
+- Netlify 환경 변수에 `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+등록 후 재빌드를 통해 문제를 해결했습니다.
+
+---
+
+## 📈 향후 개선 계획
+
+- 반응형 UI 보완
+- 학습 통계 상세 페이지 추가
+- UI/UX 디테일 개선
+- 코드 구조 리팩토링
+
+---
+
+## 🧑‍💻 개발자
+
+프론트엔드 개발자를 목표로 학습하며,
+단순 기능 구현을 넘어 구조 설계와 배포 환경 구성까지 경험하기 위해 제작한 프로젝트입니다.
+
+UI 구현뿐만 아니라,
+레이아웃 구조 설계, 상태 흐름 관리, 배포 환경 이슈 해결까지 직접 고민하며 개발했습니다.
