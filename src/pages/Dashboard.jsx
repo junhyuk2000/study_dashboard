@@ -37,7 +37,7 @@ export default function Dashboard() {
       const name = user?.user_metadata?.nickname ?? "";
       setNickname(name);
 
-      const {data, error} =await supabase
+      const {data, error} = await supabase
       .from("todos")
       .select("*")
       .order("created_at", {ascending:false})

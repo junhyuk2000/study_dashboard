@@ -1,4 +1,9 @@
-export const getWeekRange = (baseDate = new Date()) => {
+interface WeekRange {
+  start : Date;
+  end : Date;
+}
+
+export const getWeekRange = (baseDate :Date = new Date()):WeekRange => {
   const now = new Date(baseDate);
   const day = now.getDay();
 
