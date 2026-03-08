@@ -8,6 +8,8 @@ import Input from "../components/common/Input"
 import "../styles/Input.css"
 import Layout from "../components/layout/Layout";
 
+
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -16,12 +18,11 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const ERROR_MAP = {
+  const ERROR_MAP: Record<string, string> = {
   "Invalid login credentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
   };
 
-  const handleSubmit = async (e) => {
-    e?.preventDefault?.();
+  const handleSubmit = async () => {
     setError("");
     
     //1차 공백 입력
@@ -35,7 +36,7 @@ export default function Login() {
       const res = await login({ email, password });
       navigate("/dashboard");
     } catch (err) { //2차 아이디 or 비밀번호 틀릴 시
-      setError(ERROR_MAP[err?.message] || "로그인 실패")
+      setError(ERROR_MAP[(err as Error).message] || "로그인 실패")
       console.log(err);
     } finally {
       setLoading(false);
@@ -70,7 +71,10 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSubmit(e);
+                  if (e.key === "Enter") {                  
+                    e.preventDefault();
+                    handleSubmit();
+                  }
                 }}
               />
             </div>
