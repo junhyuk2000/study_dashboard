@@ -11,7 +11,20 @@ import { logout } from "../auth/authService";
 import StudyChart from"../components/StudyChart"
 import { formatMinutes } from "../utils/formatMinutes";
 import { getWeekRange } from "../utils/getWeekRange";
+import type { Session } from "../types/study"
 
+interface WeeklyData {
+  name: string;
+  minutes: number;
+}
+
+interface TodoRow {
+  id: number;
+  title: string;
+  done: boolean;
+  minutes: number | null;
+  created_at: string;
+}
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -21,7 +34,7 @@ export default function Dashboard() {
     navigate("/login");
   };
 
-  const [sessions,setSessions] = useState([]);
+  const [sessions,setSessions] = useState<Session[]>([]);
   const [nickname, setNickname] = useState("");
 
   // ===== SUPABASE TODOS LOAD =====
@@ -49,7 +62,7 @@ export default function Dashboard() {
       }
       
       setSessions(
-        (data ?? []).map((t)=>({
+        ((data ?? []) as TodoRow[]).map((t) =>({
           id:t.id,
           title:t.title,
           done:t.done,
@@ -66,7 +79,7 @@ export default function Dashboard() {
   .filter((s)=>!s.done).length;
 
   //오늘 공부시간 계산
-  const isToday = (iso) =>{
+  const isToday = (iso: string) =>{
     const d = new Date(iso);
     const now = new Date();
 
@@ -101,7 +114,7 @@ export default function Dashboard() {
   const weekTotalTime = formatMinutes(weekMinutes);
 
   // ===== 주간 차트 데이터 (sessions → 요일별 minutes) =====
-  const weeklyData = useMemo(() => {
+  const weeklyData = useMemo<WeeklyData[]>(() => {
     const base = [
       { name: "월", minutes: 0 },
       { name: "화", minutes: 0 },
@@ -122,7 +135,10 @@ export default function Dashboard() {
       const jsDay = d.getDay(); 
       const idx = jsDay === 0 ? 6 : jsDay - 1; 
 
-      base[idx].minutes += Number(s.minutes) || 0;
+      const item = base[idx];
+      if(!item) continue;
+
+      item.minutes += Number(s.minutes) || 0;
     }
 
     return base;
