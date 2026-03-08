@@ -11,7 +11,3 @@ export interface WeeklyStudyData {
     minutes : number;
 }
 
-export interface StudyListProps {
-    sessions : Session[];
-    setSessions : React.Dispatch<React.SetStateAction<Session[]>>;
-}

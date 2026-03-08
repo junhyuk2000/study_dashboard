@@ -3,8 +3,13 @@ import { useState } from "react";
 import "../styles/StudyList.css"
 import { supabase } from "../lib/supabaseClient";
 import Input from "./common/Input";
-import type { Session, StudyListProps } from "../types/study"
+import type { Session } from "../types/study"
 
+
+interface StudyListProps {
+    sessions : Session[];
+    setSessions : React.Dispatch<React.SetStateAction<Session[]>>;
+}
 
 export default function StudyList({ sessions, setSessions } :StudyListProps) {
 
