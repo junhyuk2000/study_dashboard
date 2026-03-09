@@ -25,26 +25,43 @@ https://study-dashboard-junhyuk.netlify.app
 ## 🚀 주요 기능
 
 - 🔐 회원가입 / 로그인 (Supabase Auth)
+- 🔒 Protected Route 기반 인증 사용자 접근 제어
 - 📝 오늘 할 일 추가 / 삭제 / 완료 처리
 - 🗂 완료 시 최근 기록 자동 반영
 - 📊 Recharts 기반 주간 학습 시간 그래프
 - 🕛 자정 기준 "오늘 할 일" 필터링 처리
 - 🔄 GitHub + Netlify 자동 배포 구성
-
+  
 ---
 
 ## 🛠 기술 스택
 
 ### Frontend
-- React (Vite 기반 SPA 아키텍처 구성)
-- CSS (Flex / Grid 기반 반응형 레이아웃 설계)
-- Recharts (학습 시간 데이터 시각화)
+- React
+- TypeScript
+- Vite
+- CSS (Flex / Grid 기반 레이아웃)
+- Recharts (데이터 시각화)
 
 ### Backend / DB
 - Supabase (Auth + PostgreSQL 기반 데이터 관리)
 
 ### Deployment
 - Netlify (GitHub 연동 CI/CD 자동 배포)
+
+---
+
+## 🔧 TypeScript 마이그레이션
+
+기존 React(JavaScript) 프로젝트를 TypeScript로 마이그레이션하여
+컴포넌트 props, 상태, API 데이터 타입을 명확히 정의했습니다.
+
+- Session 데이터 타입 정의
+- 컴포넌트 Props 타입 적용
+- Supabase 응답 데이터 타입 정리
+- 이벤트 타입 및 상태 관리 타입 적용
+
+이를 통해 코드 안정성과 유지보수성을 개선했습니다.
 
 ---
 
@@ -59,7 +76,8 @@ src/
 ├ router/ # 라우팅 관리
 ├ styles/ # 전역 및 페이지별 스타일
 ├ lib/ # supabaseClient
-└ utils/ # 날짜, 시간 관련 유틸
+├ utils/ # 날짜, 시간 관련 유틸
+└ types/ # TypeScript 타입 정의
 ```
 ---
 
@@ -128,7 +146,7 @@ Login / Signup / Dashboard가 동일한 Window UI 구조를 사용하도록
 ## 🧑‍💻 개발자
 
 프론트엔드 개발자를 목표로 학습하며,
-단순 기능 구현을 넘어 구조 설계와 배포 환경 구성까지 경험하기 위해 제작한 프로젝트입니다.
+단순 기능 구현을 넘어 컴포넌트 구조 설계, 상태 흐름 관리, 배포 환경 구성까지 실제 서비스 구조를 고려하며 개발한 프로젝트입니다.
 
 UI 구현뿐만 아니라,
 레이아웃 구조 설계, 상태 흐름 관리, 배포 환경 이슈 해결까지 직접 고민하며 개발했습니다.
