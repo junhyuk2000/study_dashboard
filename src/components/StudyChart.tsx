@@ -8,7 +8,17 @@ import {
   Bar,
 } from "recharts";
 
-export default function StudyChart({ data }) {
+
+interface ChartData {
+  name: string;
+  minutes: number;
+}
+
+interface StudyChartProps {
+  data: ChartData[]
+}
+
+export default function StudyChart({ data }: StudyChartProps) {
   return (
     
     <div>

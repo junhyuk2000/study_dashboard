@@ -1,13 +1,15 @@
 import { formatMinutes } from "../utils/formatMinutes";
 import "../styles/StudyHistory.css"
+import type { Session } from "../types/study"
 
-export default function StudyHistory({ sessions }) {
-    const recentDone = (sessions ?? [])
-        .filter((s) => s.done)
-        .slice(0, 5);
+interface StudyHistoryProps {
+  sessions : Session[];
+}
 
+export default function StudyHistory({ sessions }: StudyHistoryProps) {
+    const recentDone = sessions.filter((s) => s.done).slice(0, 5);
 
-    const toRelativeDay = (iso) => {
+    const toRelativeDay = (iso: string): string => {
     const d = new Date(iso);
     const now = new Date();
 
@@ -18,7 +20,7 @@ export default function StudyHistory({ sessions }) {
     startOfThatDay.setHours(0, 0, 0, 0);
 
     const diffDays = Math.round(
-        (startOfToday - startOfThatDay) / (1000 * 60 * 60 * 24)
+        (startOfToday.getTime()  - startOfThatDay.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     if (diffDays === 0) return "오늘";

@@ -2,7 +2,7 @@ import { Routes,Route,Navigate } from "react-router-dom"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Dashboard from "./pages/Dashboard"
-import ProtectedRoute from "./router/ProtectedRoute.jsx";
+import ProtectedRoute from "./router/ProtectedRoute.tsx";
 import './App.css'
 
 function App() {

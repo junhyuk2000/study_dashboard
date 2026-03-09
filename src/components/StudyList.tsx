@@ -2,13 +2,20 @@ import Button from "./common/Button";
 import { useState } from "react";
 import "../styles/StudyList.css"
 import { supabase } from "../lib/supabaseClient";
-import Input from "../components/common/Input";
+import Input from "./common/Input";
+import type { Session } from "../types/study"
 
-export default function StudyList({ sessions, setSessions }) {
+
+interface StudyListProps {
+    sessions : Session[];
+    setSessions : React.Dispatch<React.SetStateAction<Session[]>>;
+}
+
+export default function StudyList({ sessions, setSessions } :StudyListProps) {
 
     const [isAdding,setIsAdding] = useState(false);
     const [title,setTitle] = useState("");
-    const [minutes,setMinutes] = useState();
+    const [minutes,setMinutes] = useState<number | undefined>();
     //리스트 아이템 추가
     const addSession = async() => {
         const trimmed = title.trim();
@@ -57,12 +64,12 @@ export default function StudyList({ sessions, setSessions }) {
         ])
         setTitle("");
         setIsAdding(false);
-        setMinutes();
+        setMinutes(undefined);
     };
 
 
     // 리스트 아이템 삭제
-    const removeSession = async(id) =>{
+    const removeSession = async(id :number) =>{
         const { error } = await supabase
         .from("todos")
         .delete()
@@ -76,7 +83,7 @@ export default function StudyList({ sessions, setSessions }) {
     }
 
     // 체크박스 토글
-    const toggleDone = async(id,nextDone) =>{
+    const toggleDone = async(id :number ,nextDone :boolean) =>{
         const { error } = await supabase
         .from("todos")
         .update({ done:nextDone })

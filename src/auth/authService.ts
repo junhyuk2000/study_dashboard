@@ -1,9 +1,20 @@
 import { supabase } from "../lib/supabaseClient"
 
-export async function login({ email, password }){
+interface LoginParams {
+    email : string;
+    password : string;
+}
+
+interface SignupParams {
+    email : string;
+    password : string;
+    nickname : string;
+}
+
+export async function login({ email, password }: LoginParams){
     const { data, error } = await supabase.auth.signInWithPassword({
-        email : email,
-        password : password,
+        email,
+        password,
     });
 
     if(error){
@@ -23,7 +34,7 @@ export async function getSession(){
     return data.session; //null or session
 }
 
-export async function signup({ email, password, nickname }){
+export async function signup({ email, password, nickname }: SignupParams){
     const { data, error } = await supabase.auth.signUp({
         email,
         password,

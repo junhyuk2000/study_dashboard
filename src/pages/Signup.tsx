@@ -18,8 +18,7 @@ export default function Signup () {
     const [confirmPassword, setConfirmPassword] = useState("");
 
 
-    const handleSubmit = async(e) =>{
-        e?.preventDefault?.();
+    const handleSubmit = async() =>{
         setError("");
 
         if (!nickname.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
@@ -45,8 +44,6 @@ export default function Signup () {
             await signup({ email,password, nickname });
             navigate("/login");
         } catch(err) {
-            //에러 처리 오류 해결 해야함
-            console.log(err.statue,err.message);
             setError("회원가입 실패");
         } finally {
             setLoading(false);
@@ -86,7 +83,10 @@ export default function Signup () {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             onKeyDown={(e) => {
-                            if (e.key === "Enter") handleSubmit(e);
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleSubmit();
+                            };
                             }}
                         />
                         {error && <p className="signup-error">{error}</p>}

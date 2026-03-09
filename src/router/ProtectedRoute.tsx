@@ -1,8 +1,17 @@
 import { useEffect,useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient"
+import type { AuthChangeEvent } from "@supabase/supabase-js"
+import type { Session } from "@supabase/supabase-js"
 
-export default function ProtectedRoute({children}){
+
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+}
+
+
+
+export default function ProtectedRoute({children}: ProtectedRouteProps){
     const [checking,setChecking] = useState(true);
     const [authed, setAuthed] = useState(false);
 
@@ -15,7 +24,7 @@ export default function ProtectedRoute({children}){
 
         check();
 
-        const { data:sub } = supabase.auth.onAuthStateChange((_event, session)=>{
+        const { data:sub } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) =>{
             setAuthed(!!session);
             setChecking(false);
         });
