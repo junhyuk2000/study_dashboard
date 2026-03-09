@@ -44,8 +44,6 @@ export default function Signup () {
             await signup({ email,password, nickname });
             navigate("/login");
         } catch(err) {
-            //에러 처리 오류 해결 해야함
-            console.log(err.status,err.message);
             setError("회원가입 실패");
         } finally {
             setLoading(false);
